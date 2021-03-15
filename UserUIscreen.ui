@@ -7,66 +7,225 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>600</height>
+    <height>480</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>800</width>
+    <height>480</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>800</width>
+    <height>480</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="button1">
+   <widget class="QFrame" name="bgFRAME">
     <property name="geometry">
      <rect>
-      <x>290</x>
-      <y>250</y>
-      <width>221</width>
-      <height>71</height>
+      <x>0</x>
+      <y>0</y>
+      <width>801</width>
+      <height>481</height>
      </rect>
     </property>
-    <property name="font">
-     <font>
-      <family>Kanit</family>
-      <pointsize>12</pointsize>
-     </font>
+    <property name="autoFillBackground">
+     <bool>false</bool>
     </property>
-    <property name="text">
-     <string>คลิกเพื่อไปหน้าถัดไป -&gt;</string>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgba(0, 0, 0, 0);</string>
     </property>
-   </widget>
-   <widget class="QLabel" name="label1">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>100</y>
-      <width>741</width>
-      <height>171</height>
-     </rect>
+    <property name="frameShape">
+     <enum>QFrame::StyledPanel</enum>
     </property>
-    <property name="font">
-     <font>
-      <family>Kanit</family>
-      <pointsize>26</pointsize>
-     </font>
+    <property name="frameShadow">
+     <enum>QFrame::Raised</enum>
     </property>
-    <property name="text">
-     <string>Welcome to Smart Refrigerator MK II</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
+    <widget class="QLabel" name="version_label">
+     <property name="geometry">
+      <rect>
+       <x>740</x>
+       <y>440</y>
+       <width>58</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Leelawadee UI</family>
+       <pointsize>12</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="layoutDirection">
+      <enum>Qt::LeftToRight</enum>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
+     <property name="text">
+      <string>V.1.0.0  </string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="bg_label">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>1</y>
+       <width>800</width>
+       <height>480</height>
+      </rect>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>800</width>
+       <height>480</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>800</width>
+       <height>480</height>
+      </size>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="pixmap">
+      <pixmap>QT_resource/bgsky.jpg</pixmap>
+     </property>
+     <property name="scaledContents">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QLabel" name="touchhere_label">
+     <property name="geometry">
+      <rect>
+       <x>220</x>
+       <y>320</y>
+       <width>370</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Leelawadee UI</family>
+       <pointsize>18</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="layoutDirection">
+      <enum>Qt::LeftToRight</enum>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QLabel{
+color: rgb(0, 0, 83)
+
+}</string>
+     </property>
+     <property name="text">
+      <string>แตะที่นี่เพื่อไปหน้าถัดไป</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="button1">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>801</width>
+       <height>481</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Kanit</family>
+       <pointsize>12</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QLabel" name="whitebg_label">
+     <property name="geometry">
+      <rect>
+       <x>-10</x>
+       <y>90</y>
+       <width>821</width>
+       <height>171</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QLabel{
+background-color: rgb(255, 255, 255);
+}</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QLabel" name="Welcome_label">
+     <property name="geometry">
+      <rect>
+       <x>100</x>
+       <y>160</y>
+       <width>618</width>
+       <height>47</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Leelawadee UI</family>
+       <pointsize>26</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="autoFillBackground">
+      <bool>false</bool>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QLabel{
+
+	color: rgb(0, 0, 127);
+
+}</string>
+     </property>
+     <property name="text">
+      <string>Welcome to Smart Refrigerator MK II</string>
+     </property>
+     <property name="scaledContents">
+      <bool>false</bool>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <zorder>button1</zorder>
+    <zorder>bg_label</zorder>
+    <zorder>version_label</zorder>
+    <zorder>whitebg_label</zorder>
+    <zorder>touchhere_label</zorder>
+    <zorder>Welcome_label</zorder>
    </widget>
   </widget>
-  <widget class="QMenuBar" name="menubar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>800</width>
-     <height>21</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources/>
  <connections/>
