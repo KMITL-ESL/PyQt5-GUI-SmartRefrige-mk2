@@ -28,11 +28,9 @@ class MyWindow(QMainWindow): # inherit from QMainWindow
         self.label.adjustSize()
 
 
-def window():
+if __name__ == "__main__":
     app = QApplication(sys.argv)
     win = MyWindow()
 
     win.show()
     sys.exit(app.exec_())
-
-window()

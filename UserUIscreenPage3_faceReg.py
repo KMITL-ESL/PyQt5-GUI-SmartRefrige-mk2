@@ -13,10 +13,12 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
+
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(800, 480)
         MainWindow.setMinimumSize(QtCore.QSize(800, 480))
         MainWindow.setMaximumSize(QtCore.QSize(800, 480))
+
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.bgLabel = QtWidgets.QLabel(self.centralwidget)
@@ -28,48 +30,47 @@ class Ui_MainWindow(object):
         self.bgLabel.setPixmap(QtGui.QPixmap("QT_resource/bgsky.jpg"))
         self.bgLabel.setScaledContents(True)
         self.bgLabel.setObjectName("bgLabel")
-        self.AddStuff_Label_3 = QtWidgets.QLabel(self.centralwidget)
-        self.AddStuff_Label_3.setGeometry(QtCore.QRect(90, 10, 618, 47))
+        self.face_label = QtWidgets.QLabel(self.centralwidget)
+        self.face_label.setGeometry(QtCore.QRect(90, 10, 618, 47))
+
         font = QtGui.QFont()
         font.setFamily("Leelawadee UI")
         font.setPointSize(18)
         font.setBold(True)
         font.setWeight(75)
-        self.AddStuff_Label_3.setFont(font)
-        self.AddStuff_Label_3.setAutoFillBackground(False)
-        self.AddStuff_Label_3.setStyleSheet("QLabel{\n"
-"\n"
-"    color: rgb(0, 0, 127);\n"
-"\n"
-"}")
-        self.AddStuff_Label_3.setScaledContents(False)
-        self.AddStuff_Label_3.setAlignment(QtCore.Qt.AlignCenter)
-        self.AddStuff_Label_3.setObjectName("AddStuff_Label_3")
+
+        self.face_label.setFont(font)
+        self.face_label.setAutoFillBackground(False)
+        self.face_label.setStyleSheet("QLabel{color: rgb(0, 0, 127);}")
+        self.face_label.setScaledContents(False)
+        self.face_label.setAlignment(QtCore.Qt.AlignCenter)
+        self.face_label.setObjectName("face_label")
+
         self.camera_label = QtWidgets.QLabel(self.centralwidget)
         self.camera_label.setGeometry(QtCore.QRect(60, 70, 681, 321))
-        self.camera_label.setStyleSheet("QLabel{\n"
-"background-color: rgb(255, 255, 255);\n"
-"}")
+        self.camera_label.setStyleSheet("QLabel{background-color: rgb(255, 255, 255);}")
         self.camera_label.setText("")
         self.camera_label.setObjectName("camera_label")
         self.cancelbutton = QtWidgets.QPushButton(self.centralwidget)
         self.cancelbutton.setGeometry(QtCore.QRect(330, 410, 150, 60))
+
         font = QtGui.QFont()
         font.setFamily("Leelawadee UI")
         font.setPointSize(16)
         font.setBold(False)
         font.setWeight(50)
         self.cancelbutton.setFont(font)
-        self.cancelbutton.setStyleSheet("background-color: rgb(232, 232, 232);\n"
-"color: rgb(59, 59, 59)")
+        self.cancelbutton.setStyleSheet("background-color: rgb(232, 232, 232); color: rgb(59, 59, 59);")
         self.cancelbutton.setObjectName("cancelbutton")
         self.version_label = QtWidgets.QLabel(self.centralwidget)
         self.version_label.setGeometry(QtCore.QRect(717, 440, 81, 41))
+
         font = QtGui.QFont()
         font.setFamily("Leelawadee UI")
         font.setPointSize(12)
         font.setBold(True)
         font.setWeight(75)
+
         self.version_label.setFont(font)
         self.version_label.setLayoutDirection(QtCore.Qt.LeftToRight)
         self.version_label.setStyleSheet("")
@@ -83,7 +84,7 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.AddStuff_Label_3.setText(_translate("MainWindow", "โปรดหันหน้าเข้าหากล้องเพื่อยืนยันตัวตน"))
+        self.face_label.setText(_translate("MainWindow", "โปรดหันหน้าเข้าหากล้องเพื่อยืนยันตัวตน"))
         self.cancelbutton.setText(_translate("MainWindow", "ย้อนกลับ "))
         self.version_label.setText(_translate("MainWindow", "V.1.0.0  "))
 
