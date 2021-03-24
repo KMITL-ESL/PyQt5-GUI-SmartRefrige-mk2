@@ -17,7 +17,7 @@ from PyQt5.QtCore import QTimer
 # import Opencv module
 import cv2
 
-from ui_main_window import *
+from testCameraUI_window import *
 
 class MainWindow(QWidget):
     # class constructor
@@ -32,14 +32,20 @@ class MainWindow(QWidget):
         # set timer timeout callback function
         self.timer.timeout.connect(self.viewCam)
         # set control_bt callback clicked  function
-        self.ui.control_bt.clicked.connect(self.controlTimer)
+        #self.ui.control_bt.clicked.connect(self.controlTimer)
+        
+                    # create video capture
+        self.cap = cv2.VideoCapture(0)
+        # start timer
+        self.timer.start(20) # default is 20 seconds
 
     # view camera
     def viewCam(self):
+        print('viewCam')
         # read image in BGR format
         ret, image = self.cap.read()
         # convert image to RGB format
-        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB) #COLOR_BGR2RGB
         # get image infos
         height, width, channel = image.shape
         step = channel * width
@@ -50,12 +56,13 @@ class MainWindow(QWidget):
 
     # start/stop timer
     def controlTimer(self):
+        print('controlTimer')
         # if timer is stopped
         if not self.timer.isActive():
             # create video capture
             self.cap = cv2.VideoCapture(0)
             # start timer
-            self.timer.start(20)
+            self.timer.start(20) # default is 20 seconds
             # update control_bt text
             self.ui.control_bt.setText("Stop")
         # if timer is started

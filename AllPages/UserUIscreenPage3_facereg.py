@@ -3,6 +3,8 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+# import Opencv module
+import cv2
 
 class Page3_FaceReg(QtWidgets.QWidget):
     
@@ -34,8 +36,8 @@ class Page3_FaceReg(QtWidgets.QWidget):
         self.face_label.setObjectName("face_label")
 
         self.camera_label = QtWidgets.QLabel(self)
-        self.camera_label.setGeometry(QtCore.QRect(60, 70, 681, 321))
-        self.camera_label.setStyleSheet("QLabel{background-color: rgb(255, 255, 255);}")
+        self.camera_label.setGeometry(QtCore.QRect(79, 70, 640, 321))          # size of camera image            
+        self.camera_label.setStyleSheet("QLabel{background-color: rgb(60, 60, 60);}")
         self.camera_label.setText("")
         self.camera_label.setObjectName("camera_label")
         
@@ -63,6 +65,23 @@ class Page3_FaceReg(QtWidgets.QWidget):
         self.version_label.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
         self.version_label.setObjectName("version_label")
 
+        # Camera Start
+
+        # create a timer
+        self.timer = QtCore.QTimer()
+        # set timer timeout callback function
+        self.timer.timeout.connect(self.viewCam)
+        # set control_bt callback clicked  function
+        self.cancelbutton.clicked.connect(self.controlTimer)
+        
+        # create video capture
+        self.cap = cv2.VideoCapture(0)  
+        self.cap.set(3, 640)    # width # ratio 3:4
+        self.cap.set(4, 480)    # height
+        # start timer
+        self.timer.start(20) # default is 20 seconds
+
+
         self.retranslateUi(parent)
         QtCore.QMetaObject.connectSlotsByName(parent)
 
@@ -72,4 +91,32 @@ class Page3_FaceReg(QtWidgets.QWidget):
         self.face_label.setText(_translate("MainWindow", "โปรดหันหน้าเข้าหากล้องเพื่อยืนยันตัวตน"))
         self.cancelbutton.setText(_translate("MainWindow", "ย้อนกลับ "))
         self.version_label.setText(_translate("MainWindow", "V.1.0.0  "))
+
+
+    # view camera
+    def viewCam(self):
+
+        # read image in BGR format
+        ret, image = self.cap.read()
+        # convert image to RGB format
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        # get image infos
+        
+        height, width, channel = image.shape
+        step = channel * width
+        # create QImage from image
+        qImg = QtGui.QImage(image.data, width, height, step, QtGui.QImage.Format_RGB888)
+        # show image in img_label
+        self.camera_label.setPixmap(QtGui.QPixmap.fromImage(qImg))
+
+        # start/stop timer
+    def controlTimer(self):
+        # if timer is stopped
+        if self.timer.isActive():
+            # stop timer
+            self.timer.stop()
+            # release video capture (freeze picture)
+            # self.cap.release()
+
+
 
