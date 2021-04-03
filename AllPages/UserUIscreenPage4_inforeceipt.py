@@ -263,7 +263,7 @@ class Page4_InfoReceipt(QtWidgets.QWidget):
         font.setWeight(75)
         self.totalmoney_label = QtWidgets.QLabel(self.horizontalFrame)
         self.totalmoney_label.setFont(font)
-        self.totalmoney_label.setAlignment(QtCore.Qt.AlignCenter)
+        self.totalmoney_label.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignVCenter)
         self.totalmoney_label.setObjectName("totalmoney_label")
 
         self.totalamount.addWidget(self.totalmoney_label)
@@ -282,9 +282,9 @@ class Page4_InfoReceipt(QtWidgets.QWidget):
 
         # set Stretch
 
-        self.totalamount.setStretch(0, 7)
-        self.totalamount.setStretch(1, 2)
-        self.totalamount.setStretch(2, 1)
+        self.totalamount.setStretch(0, 20)
+        self.totalamount.setStretch(1, 3)
+        self.totalamount.setStretch(2, 2)
 
         self.verticalLayout.addWidget(self.horizontalFrame)
 
@@ -296,15 +296,17 @@ class Page4_InfoReceipt(QtWidgets.QWidget):
 
         self.loadData()
 
-    def loadData(self, goods=[]):
+    def loadData(self, goods=[], users=[], username=''):
         
         row = 0
         self.tableGoods.setRowCount(len(goods))
+        totalPrice = 0.00
         
         for good in goods:
+            totalPrice += good["price"]
             col_item_1 = QtWidgets.QTableWidgetItem(good["name"])
             col_item_2 = QtWidgets.QTableWidgetItem(str(good["value"]))
-            col_item_3 = QtWidgets.QTableWidgetItem(str(good["price"]))
+            col_item_3 = QtWidgets.QTableWidgetItem(str("{:.2f}".format(good["price"])))
             col_item_2.setTextAlignment(QtCore.Qt.AlignCenter)
             col_item_3.setTextAlignment(QtCore.Qt.AlignCenter)
 
@@ -312,6 +314,19 @@ class Page4_InfoReceipt(QtWidgets.QWidget):
             self.tableGoods.setItem(row, 1, col_item_2)
             self.tableGoods.setItem(row, 2, col_item_3)
             row += 1
+        
+        fullName = ''
+        for user in users:
+            if user['username'] == username:
+                fullName = 'คุณ'+' '+user['first_name']+' '+user['last_name']
+                self.moneynumber.display(user['credit'])
+
+
+        _translate = QtCore.QCoreApplication.translate
+        self.totalmoney_label.setText(_translate("MainWindow", str("{:.2f}".format(totalPrice))))
+        self.name_label.setText(_translate("MainWindow", fullName))
+
+        
 
 
     def retranslateUi(self, MainWindow):
@@ -321,7 +336,7 @@ class Page4_InfoReceipt(QtWidgets.QWidget):
         self.nextpagebutton.setText(_translate("MainWindow", "ถัดไป"))
         self.tellmoney_label.setText(_translate("MainWindow", "เงินในบัญชี"))
         self.bath_label.setText(_translate("MainWindow", "บาท"))
-        self.name_label.setText(_translate("MainWindow", "คุณ"))
+        
         self.version_label.setText(_translate("MainWindow", "V.1.0.0  "))
         item = self.tableGoods.horizontalHeaderItem(0)
         item.setText(_translate("MainWindow", "รายการสินค้า"))
@@ -330,6 +345,4 @@ class Page4_InfoReceipt(QtWidgets.QWidget):
         item = self.tableGoods.horizontalHeaderItem(2)
         item.setText(_translate("MainWindow", "ราคา (฿)"))
         self.total_label.setText(_translate("MainWindow", "รวม"))
-        self.totalmoney_label.setText(_translate("MainWindow", "10.00"))
         self.totalmoneyฺbaht_label.setText(_translate("MainWindow", "฿"))
-

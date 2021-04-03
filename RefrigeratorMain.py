@@ -22,20 +22,38 @@ class mainWin(QMainWindow):
         self.setFixedSize(800, 480)
         
         self.name = 'น้ำดื่ม ฿5'
-        self.bottle_value = 0
+        self.bottle_value = 1
         self.price = 5
 
-        # data here
+        # data goods here
         self.goods = [
             {
                 "name": self.name,
                 "value": self.bottle_value,
-                "price": self.bottle_value*self.price
+                "price": self.price
             },
         ]
 
+        # data user here
+        self.users = [
+            {
+                "username": "sirawit",
+                "first_name": "สิรวิชญ์",
+                "last_name": "สุขวัฒนาวิทย์", 
+                "credit": 200 
+            },
+            {
+                "username": "watcharaporn",
+                "first_name": "วัชราภรณ์",
+                "last_name": "ชาแท่น", 
+                "credit": 150 
+            },
+
+            
+        ]
+
         # start what page ?
-        self.startSecond()
+        self.startFirst()
         #self.startFouth()
 
 
@@ -58,6 +76,7 @@ class mainWin(QMainWindow):
         self.setCentralWidget(self.secondPage)
 
         # Change value
+        self.updateSecondPage()
         self.secondPage.plusbutton.clicked.connect(self.plus)
         self.secondPage.minusbutton.clicked.connect(self.minus)
 
@@ -67,27 +86,34 @@ class mainWin(QMainWindow):
         self.show()
     
     def checkIfEmpty(self):
-        if self.bottle_value != 0:
+        if self.bottle_value != 0:  
             self.startThird()
 
     # PlusData Function
     def plus(self):
-        if self.bottle_value <= 98:
-            self.bottle_value+=1
+        if self.bottle_value < 4: # old: 98 new: 4 because user can't carry more than 4 bottles 
+            self.bottle_value += 1
         self.updateSecondPage()
 
     # MinusData Function
     def minus(self):
-        if self.bottle_value >= 1:
-            self.bottle_value-=1
+        if self.bottle_value > 1: # old: 0 new: 1 because comfortable to use
+            self.bottle_value -= 1
         self.updateSecondPage()
     
     def updateSecondPage(self):
+        self.updateGoods()
         self.secondPage.lcdNumber.display(self.bottle_value)
         if self.bottle_value != 0:
             self.secondPage.nextpagebutton.setStyleSheet("background-color: rgb(9, 115, 227); color: rgb(255, 255, 255);")
         else:
             self.secondPage.nextpagebutton.setStyleSheet("background-color: rgb(232, 232, 232); color: rgb(60, 60, 60);")
+
+    def updateGoods(self):
+        for good in self.goods:
+            good['value'] = self.bottle_value
+            good['price'] = self.bottle_value*self.price
+
 
     def startThird(self):
         self.thirdPage = Page3_FaceReg(self)
@@ -114,7 +140,7 @@ class mainWin(QMainWindow):
         # CentralWidget
         self.setCentralWidget(self.fourthPage)
 
-        self.fourthPage.loadData(self.goods)
+        self.fourthPage.loadData(self.goods, self.users, "sirawit") # select username
 
         # Go to previous page if click
         self.fourthPage.cancelbutton.clicked.connect(self.startThird)
