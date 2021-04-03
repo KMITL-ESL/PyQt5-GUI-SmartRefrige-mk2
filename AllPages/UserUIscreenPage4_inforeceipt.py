@@ -179,6 +179,8 @@ class Page4_InfoReceipt(QtWidgets.QWidget):
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout.setObjectName("verticalLayout")
 
+        # Table start 
+
         self.tableGoods = QtWidgets.QTableWidget(self.table_frame)
         self.tableGoods.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.tableGoods.setFrameShadow(QtWidgets.QFrame.Plain)
@@ -187,32 +189,40 @@ class Page4_InfoReceipt(QtWidgets.QWidget):
         self.tableGoods.setColumnCount(3)
         self.tableGoods.setRowCount(0)
 
-        item = QtWidgets.QTableWidgetItem()
-        font = QtGui.QFont()
-        font.setFamily("Leelawadee UI")
-        font.setPointSize(12)
-        font.setBold(True)
-        font.setWeight(75)
-        item.setFont(font)
-        self.tableGoods.setHorizontalHeaderItem(0, item)
+        # Customize Table property
+        self.tableGoods.setColumnWidth(0,400)
+        self.tableGoods.setColumnWidth(1,110)
+        self.tableGoods.setColumnWidth(2,150)
+        self.tableGoods.horizontalHeader().setStretchLastSection(True)
 
-        item = QtWidgets.QTableWidgetItem()
-        font = QtGui.QFont()
-        font.setFamily("Leelawadee UI")
-        font.setPointSize(12)
-        font.setBold(True)
-        font.setWeight(75)
-        item.setFont(font)
-        self.tableGoods.setHorizontalHeaderItem(1, item)
+        # font for all header (3 header columns )
+        header_font = QtGui.QFont()
+        header_font.setFamily("Leelawadee UI")
+        header_font.setPointSize(13)
+        header_font.setBold(True)
+        header_font.setWeight(75)
 
-        item = QtWidgets.QTableWidgetItem()
-        font = QtGui.QFont()
-        font.setFamily("Leelawadee UI")
-        font.setPointSize(12)
-        font.setBold(True)
-        font.setWeight(75)
-        item.setFont(font)
-        self.tableGoods.setHorizontalHeaderItem(2, item)
+        header_item_1 = QtWidgets.QTableWidgetItem()
+        header_item_2 = QtWidgets.QTableWidgetItem()
+        header_item_3 = QtWidgets.QTableWidgetItem()
+        header_item_1.setFont(header_font)
+        header_item_2.setFont(header_font)
+        header_item_3.setFont(header_font)
+
+        self.tableGoods.setHorizontalHeaderItem(0, header_item_1)
+        self.tableGoods.setHorizontalHeaderItem(1, header_item_2)
+        self.tableGoods.setHorizontalHeaderItem(2, header_item_3)
+
+        # font for all data (3 data columns )
+        data_font = QtGui.QFont()
+        data_font.setFamily("Leelawadee UI")
+        data_font.setPointSize(12)
+        data_font.setBold(False)
+        #data_font.setWeight(75)
+
+        self.tableGoods.setFont(data_font)
+
+        '''
         self.tableGoods.horizontalHeader().setVisible(True)
         self.tableGoods.horizontalHeader().setCascadingSectionResizes(False)
         self.tableGoods.horizontalHeader().setDefaultSectionSize(200)
@@ -221,6 +231,8 @@ class Page4_InfoReceipt(QtWidgets.QWidget):
         self.tableGoods.horizontalHeader().setSortIndicatorShown(False)
         self.tableGoods.horizontalHeader().setStretchLastSection(True)
         self.tableGoods.verticalHeader().setStretchLastSection(False)
+        '''
+        # Table end 
 
         self.verticalLayout.addWidget(self.tableGoods)
 
@@ -256,8 +268,23 @@ class Page4_InfoReceipt(QtWidgets.QWidget):
 
         self.totalamount.addWidget(self.totalmoney_label)
 
+        font = QtGui.QFont()
+        font.setFamily("Leelawadee UI")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.totalmoneyฺbaht_label = QtWidgets.QLabel(self.horizontalFrame)
+        self.totalmoneyฺbaht_label.setFont(font)
+        self.totalmoneyฺbaht_label.setAlignment(QtCore.Qt.AlignCenter)
+        self.totalmoneyฺbaht_label.setObjectName("totalmoneyฺbaht_label")
+
+        self.totalamount.addWidget(self.totalmoneyฺbaht_label)
+
+        # set Stretch
+
         self.totalamount.setStretch(0, 7)
-        self.totalamount.setStretch(1, 3)
+        self.totalamount.setStretch(1, 2)
+        self.totalamount.setStretch(2, 1)
 
         self.verticalLayout.addWidget(self.horizontalFrame)
 
@@ -266,6 +293,26 @@ class Page4_InfoReceipt(QtWidgets.QWidget):
 
         self.retranslateUi(parent)
         QtCore.QMetaObject.connectSlotsByName(parent)
+
+        self.loadData()
+
+    def loadData(self, goods=[]):
+        
+        row = 0
+        self.tableGoods.setRowCount(len(goods))
+        
+        for good in goods:
+            col_item_1 = QtWidgets.QTableWidgetItem(good["name"])
+            col_item_2 = QtWidgets.QTableWidgetItem(str(good["value"]))
+            col_item_3 = QtWidgets.QTableWidgetItem(str(good["price"]))
+            col_item_2.setTextAlignment(QtCore.Qt.AlignCenter)
+            col_item_3.setTextAlignment(QtCore.Qt.AlignCenter)
+
+            self.tableGoods.setItem(row, 0, col_item_1)
+            self.tableGoods.setItem(row, 1, col_item_2)
+            self.tableGoods.setItem(row, 2, col_item_3)
+            row += 1
+
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -281,7 +328,8 @@ class Page4_InfoReceipt(QtWidgets.QWidget):
         item = self.tableGoods.horizontalHeaderItem(1)
         item.setText(_translate("MainWindow", "จำนวน"))
         item = self.tableGoods.horizontalHeaderItem(2)
-        item.setText(_translate("MainWindow", "ราคา"))
+        item.setText(_translate("MainWindow", "ราคา (฿)"))
         self.total_label.setText(_translate("MainWindow", "รวม"))
         self.totalmoney_label.setText(_translate("MainWindow", "10.00"))
+        self.totalmoneyฺbaht_label.setText(_translate("MainWindow", "฿"))
 

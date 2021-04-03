@@ -94,10 +94,7 @@ class Page2_ChooseBottles(QtWidgets.QWidget):
         self.plusbutton.setFont(font)
         self.plusbutton.setStyleSheet("background-color: rgb(9, 115, 227);color: rgb(255, 255, 255);")
         self.plusbutton.setObjectName("plusbutton")
-        
-        # plus and minus
-        self.plusbutton.clicked.connect(self.plus)
-        self.minusbutton.clicked.connect(self.minus)
+    
 
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.digitWidget)
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
@@ -139,7 +136,8 @@ class Page2_ChooseBottles(QtWidgets.QWidget):
         self.nextpagebutton = QtWidgets.QPushButton(self)
         self.nextpagebutton.setGeometry(QtCore.QRect(330, 410, 150, 60))
         self.nextpagebutton.setFont(font)
-        self.nextpagebutton.setStyleSheet("background-color: rgb(9, 115, 227); color: rgb(255, 255, 255);")
+        # default button to gray
+        self.nextpagebutton.setStyleSheet("background-color: rgb(232, 232, 232); color: rgb(60, 60, 60);")
         self.nextpagebutton.setObjectName("nextpagebutton")
         
         font = QtGui.QFont()
@@ -183,18 +181,7 @@ class Page2_ChooseBottles(QtWidgets.QWidget):
         
         self.retranslateUi(parent)
         QtCore.QMetaObject.connectSlotsByName(parent)
-    
-        self.bottle_value = 0
 
-    def plus(self):
-        if self.bottle_value <= 98:
-            self.bottle_value+=1
-        self.lcdNumber.display(self.bottle_value)
-
-    def minus(self):
-        if self.bottle_value >= 1:
-            self.bottle_value-=1
-        self.lcdNumber.display(self.bottle_value)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
