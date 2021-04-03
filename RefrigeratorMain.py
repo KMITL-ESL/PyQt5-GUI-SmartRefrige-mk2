@@ -140,6 +140,7 @@ class mainWin(QMainWindow):
         # CentralWidget
         self.setCentralWidget(self.fourthPage)
 
+        # Load data from server
         self.fourthPage.loadData(self.goods, self.users, "sirawit") # select username
 
         # Go to previous page if click
@@ -156,6 +157,9 @@ class mainWin(QMainWindow):
         
         # CentralWidget
         self.setCentralWidget(self.fifthPage)
+
+        # Load data from server
+        self.fifthPage.loadData(self.goods, self.users, "sirawit") # select username
 
         # Go to previous page if click
         self.fifthPage.cancelbutton.clicked.connect(self.startFourth)

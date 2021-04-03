@@ -327,8 +327,6 @@ class Page4_InfoReceipt(QtWidgets.QWidget):
         self.name_label.setText(_translate("MainWindow", fullName))
 
         
-
-
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
