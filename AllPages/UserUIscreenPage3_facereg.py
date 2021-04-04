@@ -6,6 +6,11 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 # import Opencv module
 import cv2
 
+import os
+
+import face_recognition 
+# https://github.com/ageitgey/face_recognition
+
 class Page3_FaceReg(QtWidgets.QWidget):
     
     def __init__(self, parent=None):
@@ -79,7 +84,7 @@ class Page3_FaceReg(QtWidgets.QWidget):
         self.cap.set(3, 640)    # width # ratio 3:4
         self.cap.set(4, 480)    # height
         # start timer
-        self.timer.start(20) # default is 20 seconds
+        self.timer.start(20) # default is 20 milliseconds
 
 
         self.retranslateUi(parent)
@@ -98,6 +103,9 @@ class Page3_FaceReg(QtWidgets.QWidget):
 
         # read image in BGR format
         ret, image = self.cap.read()
+
+        # face_locations is now an array listing the co-ordinates of each face!
+
         # convert image to RGB format
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         # get image infos
@@ -108,6 +116,20 @@ class Page3_FaceReg(QtWidgets.QWidget):
         qImg = QtGui.QImage(image.data, width, height, step, QtGui.QImage.Format_RGB888)
         # show image in img_label
         self.camera_label.setPixmap(QtGui.QPixmap.fromImage(qImg))
+
+        # incase of save pictures in folder TempPicture
+        #image = face_recognition.load_image_file(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'TempPhoto', 'pic1.jpg'))
+
+        try:
+            image_encoding = face_recognition.face_encodings(image)[0]
+            print('\nStart')
+            print(image_encoding)
+            print('End')
+        except IndexError:
+            print('No Face Detection')
+
+    
+
 
         # start/stop timer
     def controlTimer(self):
