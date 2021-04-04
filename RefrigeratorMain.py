@@ -24,6 +24,7 @@ class mainWin(QMainWindow):
         self.name = 'น้ำดื่ม ฿5'
         self.bottle_value = 1
         self.price = 5
+        self.totalPrice = 0
 
         # data goods here
         self.goods = [
@@ -55,6 +56,7 @@ class mainWin(QMainWindow):
         # start what page ?
         self.startFirst()
         #self.startFouth()
+        #self.startSixth()
 
 
     def startFirst(self):
@@ -159,7 +161,7 @@ class mainWin(QMainWindow):
         self.setCentralWidget(self.fifthPage)
 
         # Load data from server
-        self.fifthPage.loadData(self.goods, self.users, "sirawit") # select username
+        self.totalPrice = self.fifthPage.loadData(self.goods, self.users, "sirawit") # select username
 
         # Go to previous page if click
         self.fifthPage.cancelbutton.clicked.connect(self.startFourth)
@@ -173,6 +175,9 @@ class mainWin(QMainWindow):
         
         # CentralWidget
         self.setCentralWidget(self.sixthPage)
+
+        # Load data from server
+        self.sixthPage.loadData(self.totalPrice, self.users, "sirawit") # select username
 
         # Go to next page if click
         self.sixthPage.nextpagebutton.clicked.connect(self.startFirst)

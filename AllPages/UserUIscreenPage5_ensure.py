@@ -258,6 +258,8 @@ class Page5_Ensure(QtWidgets.QWidget):
         _translate = QtCore.QCoreApplication.translate
         self.totalmoney_label.setText(_translate("MainWindow", str("{:.2f}".format(totalPrice))))
 
+        return totalPrice
+
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate

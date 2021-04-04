@@ -225,6 +225,23 @@ class Page6_Success(QtWidgets.QWidget):
         self.retranslateUi(parent)
         QtCore.QMetaObject.connectSlotsByName(parent)
 
+    def loadData(self, totalPrice=0.0, users=[], username=''):
+        
+        userCredit = 0.0
+        changeCredit = 0.0
+
+        for user in users:
+            if user['username'] == username:
+                userCredit = user['credit']
+        
+        ### Wait to do for checking if it can't pay if has lower than or negative(-)
+        changeCredit = userCredit - totalPrice
+
+        _translate = QtCore.QCoreApplication.translate
+        self.label_3.setText(_translate("MainWindow", str("{:.2f}".format(userCredit))))
+        self.label_4.setText(_translate("MainWindow", str("{:.2f}".format(totalPrice))))
+        self.label_6.setText(_translate("MainWindow", str("{:.2f}".format(changeCredit))))
+
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
@@ -232,10 +249,7 @@ class Page6_Success(QtWidgets.QWidget):
         self.AddStuff_Label_3.setText(_translate("MainWindow", "ทำรายการสำเร็จ"))
         self.label_2.setText(_translate("MainWindow", "ชำระเงิน"))
         self.label_5.setText(_translate("MainWindow", "ยอดเงินคงเหลือ      "))
-        self.label_4.setText(_translate("MainWindow", "28.00"))
-        self.label_6.setText(_translate("MainWindow", "9972.00"))
         self.label.setText(_translate("MainWindow", "เงินในบัญชี"))
-        self.label_3.setText(_translate("MainWindow", "1000.00"))
         self.label_7.setText(_translate("MainWindow", "บาท"))
         self.label_8.setText(_translate("MainWindow", "บาท"))
         self.label_9.setText(_translate("MainWindow", "บาท"))
