@@ -75,7 +75,7 @@ class Page3_FaceReg(QtWidgets.QWidget):
         # create a timer
         self.timer = QtCore.QTimer()
         # set timer timeout callback function
-        self.timer.timeout.connect(self.viewCam)
+        self.timer.timeout.connect(self.cameraFeature)
         # set control_bt callback clicked  function
         self.cancelbutton.clicked.connect(self.controlTimer)
         
@@ -83,9 +83,14 @@ class Page3_FaceReg(QtWidgets.QWidget):
         self.cap = cv2.VideoCapture(0)  
         self.cap.set(3, 640)    # width # ratio 3:4
         self.cap.set(4, 480)    # height
-        # start timer
-        self.timer.start(20) # default is 20 milliseconds
 
+        # start timer
+        self.timer.start(20) # default is 20 milliseconds for 1 frame
+        self.frame_count = 40   # how many frame to trigger 1 encoding face regconition
+
+        # time per frame * self.frame_count = 20 * 40 = 800 millisec / 1 encoding face reg 
+                                                    # can change if it to slow maybe to 500 millisec response? 
+        self.process_frame_count = 0 
 
         self.retranslateUi(parent)
         QtCore.QMetaObject.connectSlotsByName(parent)
@@ -99,17 +104,54 @@ class Page3_FaceReg(QtWidgets.QWidget):
 
 
     # view camera
-    def viewCam(self):
+    def cameraFeature(self):
 
+        image = self.initCam()
+        self.displayImage(image)
+
+    def initCam(self):  # for capture and face recognition
         # read image in BGR format
         ret, image = self.cap.read()
 
-        # face_locations is now an array listing the co-ordinates of each face!
-
         # convert image to RGB format
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-        # get image infos
+
+        # Resize frame of video to 1/4 size for faster face recognition processing
+        scale = 4 # 4, 10
+        small_frame = cv2.resize(image, (0, 0), fx=1.0/scale, fy=1.0/scale)
+
+        # Convert the image from BGR color (which OpenCV uses) to RGB color (which face_recognition uses)
+        #rgb_small_frame = small_frame[:, :, ::-1]
+        # Not working ^
+    
+        try:
+            # location detect where face is ?
+            face_locations = face_recognition.face_locations(small_frame)
+
+            # optimal time of encoding because it take to long ... 
+            if self.process_frame_count % self.frame_count == 0: 
+                image_encoding = face_recognition.face_encodings(small_frame, face_locations)[0]    # very slow ! 
+                self.process_frame_count = 0
+            self.process_frame_count += 1
+
+            # set green rectangle 
+            y1, x2, y2, x1 = face_locations[0]
+            cv2.rectangle(image, (x1*scale, y1*scale), (x2*scale, y2*scale), (0, 255, 0), 2)
+
+            print('Detect New Person')
+            #print('\nStart')
+            #print(image_encoding)  # too slow (not recommend)
+            #print('End')
+        except IndexError:
+            print('No Face Detection')
+        except Exception as e:
+            print(e)
+            
+        return image
+    
+    def displayImage(self, image):
         
+        # get image infos
         height, width, channel = image.shape
         step = channel * width
         # create QImage from image
@@ -119,16 +161,6 @@ class Page3_FaceReg(QtWidgets.QWidget):
 
         # incase of save pictures in folder TempPicture
         #image = face_recognition.load_image_file(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'TempPhoto', 'pic1.jpg'))
-
-        try:
-            image_encoding = face_recognition.face_encodings(image)[0]
-            print('\nStart')
-            print(image_encoding)
-            print('End')
-        except IndexError:
-            print('No Face Detection')
-
-    
 
 
         # start/stop timer

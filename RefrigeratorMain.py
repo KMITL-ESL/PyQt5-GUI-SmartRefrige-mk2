@@ -54,8 +54,8 @@ class mainWin(QMainWindow):
         ]
 
         # start what page ?
-        #self.startFirst()
-        self.startThird()
+        self.startFirst()
+        #self.startThird()
         #self.startFouth()
         #self.startSixth()
 
