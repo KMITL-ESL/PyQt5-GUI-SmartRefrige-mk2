@@ -11,7 +11,8 @@ from AllPages.UserUIscreenPage4_inforeceipt import Page4_InfoReceipt
 from AllPages.UserUIscreenPage5_ensure import Page5_Ensure
 from AllPages.UserUIscreenPage6_success import Page6_Success
 
-
+import shutil
+import os
 
 class mainWin(QMainWindow):
 
@@ -54,8 +55,8 @@ class mainWin(QMainWindow):
         ]
 
         # start what page ?
-        self.startFirst()
-        #self.startThird()
+        #self.startFirst()
+        self.startThird()
         #self.startFouth()
         #self.startSixth()
 
@@ -184,8 +185,22 @@ class mainWin(QMainWindow):
         self.sixthPage.nextpagebutton.clicked.connect(self.startFirst)
         self.show()
 
+    def closeEvent(self, event):
+        # in case of press x to exit 
+        try:
+            folder_name = 'TempPhoto'
+            folder_path_name = os.path.join(os.path.dirname(__file__), folder_name)
+            shutil.rmtree(folder_path_name)
+
+        except Exception as e:
+            print(e)
+
+        event.accept() # let the window close
+
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     win = mainWin()
     sys.exit(app.exec_())
+

@@ -7,8 +7,13 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 import cv2
 
 import os
+import shutil
 
 import face_recognition 
+
+import requests
+import json
+
 # https://github.com/ageitgey/face_recognition
 
 class Page3_FaceReg(QtWidgets.QWidget):
@@ -77,7 +82,7 @@ class Page3_FaceReg(QtWidgets.QWidget):
         # set timer timeout callback function
         self.timer.timeout.connect(self.cameraFeature)
         # set control_bt callback clicked  function
-        self.cancelbutton.clicked.connect(self.controlTimer)
+        self.cancelbutton.clicked.connect(self.stopTimer)
         
         # create video capture
         self.cap = cv2.VideoCapture(0)  
@@ -90,7 +95,14 @@ class Page3_FaceReg(QtWidgets.QWidget):
 
         # time per frame * self.frame_count = 20 * 40 = 800 millisec / 1 encoding face reg 
                                                     # can change if it to slow maybe to 500 millisec response? 
+        self.folder_name = 'TempPhoto'
+        self.folder_path_name = os.path.join(os.path.dirname(os.path.dirname(__file__)), self.folder_name)
+        try:
+            os.mkdir(self.folder_path_name)
+        except Exception as e:
+            print(e)
         self.process_frame_count = 0 
+        self.img_counter = 1
 
         self.retranslateUi(parent)
         QtCore.QMetaObject.connectSlotsByName(parent)
@@ -114,40 +126,83 @@ class Page3_FaceReg(QtWidgets.QWidget):
         ret, image = self.cap.read()
 
         # convert image to RGB format
-        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        imageRGB = cv2.cvtColor(image, cv2.COLOR_BGR2RGB) 
 
         # Resize frame of video to 1/4 size for faster face recognition processing
         scale = 4 # 4, 10
-        small_frame = cv2.resize(image, (0, 0), fx=1.0/scale, fy=1.0/scale)
+        small_frame = cv2.resize(image, (0, 0), fx=1.0/scale, fy=1.0/scale) # we use image that is BGR but it save as RGB, idk why? ... 
+
 
         # Convert the image from BGR color (which OpenCV uses) to RGB color (which face_recognition uses)
         #rgb_small_frame = small_frame[:, :, ::-1]
         # Not working ^
-    
+
+        # incase of save pictures in folder TempPicture
+        #small_frame = face_recognition.load_image_file(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'TempPhoto', 'pic1.jpg'))
+
         try:
             # location detect where face is ?
             face_locations = face_recognition.face_locations(small_frame)
-
             # optimal time of encoding because it take to long ... 
             if self.process_frame_count % self.frame_count == 0: 
-                image_encoding = face_recognition.face_encodings(small_frame, face_locations)[0]    # very slow ! 
+                
+                #image_encoding = face_recognition.face_encodings(small_frame, face_locations)[0]    # very slow ! # we don't need to encoding anymore
+                
+                img_name = "capture_frame_{}.jpg".format(self.img_counter)
+                path_name = os.path.join(os.path.dirname(os.path.dirname(__file__)), self.folder_name, img_name)# path name
+                 
+                cv2.imwrite(path_name, small_frame)
+                print("{} written!".format(img_name))
+                
+                # send image to server here
+                url = "https://tuuyen.herokuapp.com/api/customers/check_face/"
+
+                files=[('file',
+                            (img_name, # file name
+                            open(path_name,'rb'), # path name
+                            'image/jpeg') # content type
+                )]
+                self.img_counter += 1
+
+                print('image is sending...')
+                response = requests.request("POST", url, files=files)
+                print(response.text)
+
+                # check response text
+                try:
+                    userJSON = json.loads(response.text)    # convert text to json format (become dict)
+                    result = self.detection(userJSON)
+                    print(result)
+                    if result == True:
+                        pass
+                        #self.stopTimer()
+                        #self.startFourth()
+                except Exception as e:
+                    print(e)
+                
+
+                # make it only run once
+                #self.frame_count = 100000000
+                
                 self.process_frame_count = 0
             self.process_frame_count += 1
 
             # set green rectangle 
             y1, x2, y2, x1 = face_locations[0]
-            cv2.rectangle(image, (x1*scale, y1*scale), (x2*scale, y2*scale), (0, 255, 0), 2)
+            cv2.rectangle(imageRGB, (x1*scale, y1*scale), (x2*scale, y2*scale), (0, 255, 0), 2)
 
-            print('Detect New Person')
+            
+            #print('Detect New Person')
             #print('\nStart')
-            #print(image_encoding)  # too slow (not recommend)
+            #print(image_encoding)  # too slow (not recommend) # don't need
             #print('End')
         except IndexError:
-            print('No Face Detection')
+            pass
+            #print('No Face Detection')
         except Exception as e:
             print(e)
-            
-        return image
+
+        return imageRGB
     
     def displayImage(self, image):
         
@@ -159,18 +214,30 @@ class Page3_FaceReg(QtWidgets.QWidget):
         # show image in img_label
         self.camera_label.setPixmap(QtGui.QPixmap.fromImage(qImg))
 
-        # incase of save pictures in folder TempPicture
-        #image = face_recognition.load_image_file(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'TempPhoto', 'pic1.jpg'))
-
-
         # start/stop timer
-    def controlTimer(self):
+    def stopTimer(self):
         # if timer is stopped
         if self.timer.isActive():
             # stop timer
             self.timer.stop()
             # release video capture (freeze picture)
-            # self.cap.release()
+            self.cap.release()
 
+            try:
+                shutil.rmtree(self.folder_path_name)
+            except Exception as e:
+                print(e)
+
+    def detection(self, userJSON):
+        #print(userJSON["customerID"])
+        customerID = userJSON["customerID"].split('-')
+        
+        check_format = [8,4,4,4,12] # correct format for customerID
+        
+        for i, section in enumerate(customerID):
+            if not len(section) == check_format[i]:
+                return False
+        
+        return True
 
 
